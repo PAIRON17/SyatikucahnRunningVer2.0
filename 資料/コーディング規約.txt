@@ -1,0 +1,24 @@
+URL http://jikkenjo.net/309.html(2017/01/15)
+
+Camel方式
+
+1 private int sampleCount;
+2 private void sampleMethod();
+3 int sampleMember; // 公開範囲を指定しない場合、privateになる
+先頭の単語が小文字で、後に続く単語は、頭を大文字にして連結する。
+
+アンダースコア（_）は使用しない
+先頭を大文字にしない
+先頭以外の単語は頭を大文字にする
+privateなフィールドやメソッドは基本、これに従う
+
+Pascal方式
+
+1 public static string SampleFilename = "sample.txt";
+2 public void SampleMethod();
+すべての単語は頭を大文字にし、それぞれ連結する。
+
+アンダースコア（_）は使用しない
+すべての単語の頭は大文字
+publicなフィールド（静的なもの）やメソッドは基本、これに従う
+publicなプロパティもこれに従う
