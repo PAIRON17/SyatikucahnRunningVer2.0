@@ -7,14 +7,14 @@ using UnityEngine.UI;
 //ノルマ追加イベントのメッセージウィンドウを表示するクラス
 public class EventGUI : MonoBehaviour {
 
-    public GameObject messageWindow;
-    public Text eventText;
-    private IEnumerator eventTextEnabled;
+    public GameObject MessageWindow;
+    public Text EventText;
+    private IEnumerator _eventTextEnabled;
 
     public void EventTextDisplay(int progress)
     {
-        eventTextEnabled = EventTextEnabled(progress);
-        StartCoroutine(eventTextEnabled);
+        _eventTextEnabled = EventTextEnabled(progress);
+        StartCoroutine(_eventTextEnabled);
     }
 
     private IEnumerator EventTextEnabled(int progress)
@@ -22,24 +22,24 @@ public class EventGUI : MonoBehaviour {
         switch(progress)
         {
             case 1:
-                eventText.text = "上司さん\nなかなか手こずっているね。\nすまないが、この仕事も頼むよ。";
+                EventText.text = "上司さん\nなかなか手こずっているね。\nすまないが、この仕事も頼むよ。";
                 break;
             case 2:
-                eventText.text = "上司さん\n少しペースが遅れてるね。\nすまないが、この仕事も頼むよ。";
+                EventText.text = "上司さん\n少しペースが遅れてるね。\nすまないが、この仕事も頼むよ。";
                 break;
             case 3:
-                eventText.text = "上司さん\n順調そうだね。\nこの仕事も頼むよ。";
+                EventText.text = "上司さん\n順調そうだね。\nこの仕事も頼むよ。";
                 break;
             case 4:
-                eventText.text = "上司さん\n順調だね。\nこの仕事も任せたよ。";
+                EventText.text = "上司さん\n順調だね。\nこの仕事も任せたよ。";
                 break;
             case 5:
-                eventText.text = "上司さん\nだいぶ余裕だね。\nこの仕事も任せたよ。";
+                EventText.text = "上司さん\nだいぶ余裕だね。\nこの仕事も任せたよ。";
                 break;
         }
 
-        messageWindow.SetActive(true);
+        MessageWindow.SetActive(true);
         yield return new WaitForSeconds(3f);
-        messageWindow.SetActive(false);
+        MessageWindow.SetActive(false);
     }
 }
