@@ -6,23 +6,23 @@ using UnityEngine.UI;
 //使用シーン(Result)
 //画面に総合評価を表示するクラス
 public class EvaluationRankDisplay : MonoBehaviour {
-    public Text evaluationRankText;
+    public Text EvaluationRankText;
 
     public void EvaluationRankUpdate(int evaluationRank)
     {
         switch (evaluationRank)
         {
             case 1:
-                evaluationRankText.text = "C";
+                EvaluationRankText.text = "C";
                 break;
             case 2:
-                evaluationRankText.text = "B";
+                EvaluationRankText.text = "B";
                 break;
             case 3:
-                evaluationRankText.text = "A";
+                EvaluationRankText.text = "A";
                 break;
             case 4:
-                evaluationRankText.text = "S";
+                EvaluationRankText.text = "S";
                 break;
 
         }

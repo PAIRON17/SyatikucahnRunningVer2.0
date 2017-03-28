@@ -6,11 +6,11 @@ using UnityEngine.UI;
 //画面に時間を表示するクラス
 public class ClockGUI : MonoBehaviour {
 
-    public Text clockText;
+    public Text ClockText;
 
     public void ClockTextUpdate(int hour,int minute)
     {
-        clockText.text = hour + ":" + minute;
+        ClockText.text = hour + ":" + minute;
     }
 
 }

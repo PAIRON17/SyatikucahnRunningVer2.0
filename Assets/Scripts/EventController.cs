@@ -7,37 +7,37 @@ using UnityEngine.UI;
 //ノルマ追加イベントのクラス
 public class EventController : MonoBehaviour {
 
-    GameController gController;
-    public GameObject PRoom;
-    PenaltyRoom penalty;
-    public EventGUI EGUI;
+    private GameController _gameController;
+    public GameObject PenaltyRoom;
+    private PenaltyRoom _penalty;
+    public EventGUI EventGUI;
 
-    int hour;
-    int minute;
-    bool[] subEventFlag = new bool[3];
-    int progerss;
-    bool penaltyFlag;
+    private int _hour;
+    private int _minute;
+    private bool[] _isSubEvent = new bool[3];
+    private int _progerss;
+    private bool _isPenalty;
 
 	// Use this for initialization
 	void Start ()
     {
-        gController = GetComponent<GameController>();
-        penalty = PRoom.GetComponent<PenaltyRoom>();
+        _gameController = GetComponent<GameController>();
+        _penalty = PenaltyRoom.GetComponent<PenaltyRoom>();
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-        hour = gController.Hour;
-        minute = gController.Minute;
-        progerss = gController.Progress;
-        penaltyFlag = penalty.Flag;
+        _hour = _gameController.Hour;
+        _minute = _gameController.Minute;
+        _progerss = _gameController.Progress;
+        _isPenalty = _penalty.Flag;
 
-        if (hour >= 14 && minute >= 30 && subEventFlag[0] == false && penaltyFlag == false)
+        if (_hour >= 14 && _minute >= 30 && _isSubEvent[0] == false && _isPenalty == false)
         {
-            EGUI.EventTextDisplay(progerss);
-            QuotaAddEventCall(5,10,20,30,35,progerss);
-            subEventFlag[0] = true;
+            EventGUI.EventTextDisplay(_progerss);
+            QuotaAddEventCall(5,10,20,30,35,_progerss);
+            _isSubEvent[0] = true;
         }
 
 
@@ -46,7 +46,7 @@ public class EventController : MonoBehaviour {
     void QuotaAddEventCall(int quota1,int quota2,int quota3,int quota4,int quota5,int progress)
     {
 
-        switch (progerss)
+        switch (_progerss)
         {
             case 1:
                 QuotaAdd(quota1);
@@ -69,7 +69,7 @@ public class EventController : MonoBehaviour {
 
     void QuotaAdd(int quota)
     {
-        gController.QuotaScore = quota;
+        _gameController.QuotaScore = quota;
     }
 
 }

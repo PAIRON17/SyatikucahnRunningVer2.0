@@ -7,22 +7,22 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     //プレイヤーの移動に必要なの変数
-    const int Minlane = -3;
-    const int Maxlane = 3;
-    const float Lanewidth = 1.0f;
+    const int _minLane = -3;
+    const int _maxLane = 3;
+    const float _laneWidth = 1.0f;
 
     CharacterController controller;
     Animator animator;
 
     Vector3 moveDirection = Vector3.zero;
-    private int targetLane;
+    private int _targetLane;
 
-    public float gravity;
-    private float speedZ;
-    public float speedX;
-    public float speedJump;
-    public float accelerationZ;
-    private bool controlFlag = true;
+    public float Gravity;
+    private float _speedZ;
+    public float SpeedX;
+    public float SpeedJump;
+    public float AccelerationZ;
+    private bool _isControl = true;
 
 
     //プレイヤーが障害物に接触した処理に必要な変数
@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
     {
         set
         {
-            speedZ = value;
+            _speedZ = value;
         }
     }
 
@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
     {
         set
         {
-            controlFlag = value;
+            _isControl = value;
         }
     }
 
@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (controlFlag == true)
+        if (_isControl == true)
         {
             if (Input.GetButtonDown("Left"))
                 MoveToLeft();
@@ -94,15 +94,15 @@ public class PlayerController : MonoBehaviour
             moveDirection.z = 0;
         }
         //徐々に加速しZ方向に常に前進させる
-        float acceleratedZ = moveDirection.z + (accelerationZ * Time.deltaTime);
-        moveDirection.z = Mathf.Clamp(acceleratedZ, 0, speedZ);
+        float acceleratedZ = moveDirection.z + (AccelerationZ * Time.deltaTime);
+        moveDirection.z = Mathf.Clamp(acceleratedZ, 0, _speedZ);
 
         //X方向は目標のポジションまでの差分の割合で速度を計算
-        float ratioX = (targetLane * Lanewidth - transform.position.x) / Lanewidth;
-        moveDirection.x = ratioX * speedX;
+        float ratioX = (_targetLane * _laneWidth - transform.position.x) / _laneWidth;
+        moveDirection.x = ratioX * SpeedX;
 
         //重力分の力を毎フレーム追加
-        moveDirection.y -= gravity * Time.deltaTime;
+        moveDirection.y -= Gravity * Time.deltaTime;
 
         //移動実行
         Vector3 globalDirecton = transform.TransformDirection(moveDirection);
@@ -141,7 +141,7 @@ public class PlayerController : MonoBehaviour
     //カメラの切り替え
     private IEnumerator CameraChange()
     {
-        controlFlag = false;
+        _isControl = false;
         animator.SetBool("blowoff", true);
         while (alfa <= 1)
         {
@@ -155,26 +155,26 @@ public class PlayerController : MonoBehaviour
         alfa = 0;
         panel.GetComponent<Image>().color = new Color(red, green, blue, alfa);
         enabled = false;
-        controlFlag = true;
+        _isControl = true;
     }
 
     public void MoveToLeft()
     {
-        if (targetLane > Minlane)
-            targetLane--;
+        if (_targetLane > _minLane)
+            _targetLane--;
     }
 
     public void MoveToRight()
     {
-        if (targetLane < Maxlane)
-            targetLane++;
+        if (_targetLane < _maxLane)
+            _targetLane++;
     }
 
     public void Jump()
     {
         if (controller.isGrounded)
         {
-            moveDirection.y = speedJump;
+            moveDirection.y = SpeedJump;
             animator.SetBool("run", false);
             animator.SetBool("jump", true);
         }
