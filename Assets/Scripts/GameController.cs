@@ -8,37 +8,37 @@ using UnityEngine.SceneManagement;
 //ゲームの進行を管理するクラス
 public class GameController : MonoBehaviour {
 
-    public GameObject player;
-    PlayerController controller;
-    public GameObject scoreLogger;
-    ScoreLogger logger;
+    public GameObject Player;
+    private PlayerController _controller;
+    public GameObject ScoreLogger;
+    private ScoreLogger _logger;
     private IEnumerator sceneChange;
 
     //更新を行うGUI
     public ClockGUI[] CGUI;
-    int cGUICount = 0;
+    int _cGUICount = 0;
     public ScoreGUI[] SGUI;
-    int sGUICount = 0;
+    int _sGUICount = 0;
     public ProgressGUI[] PGUI;
 
     //ノルマとなるスコアの量
-    private int quotaScore = 80;
+    private int _quotaScore = 80;
     //取得中のスコア
-    int score;
+    private int _score;
 
-    bool timerFlag = true;
-    float timer;
-    private float elapsedtimer;
-    private int hour = 0;
-    private int minute = 0;
+    private bool _isTimer = true;
+    private float _timer;
+    private float _elapsedTimer;
+    private int _hour = 0;
+    private int _minute = 0;
 
     //フェードアウト用の変数
-    public GameObject[] gameOverText;
-    public Image[] panel;
-    Animator animator;
-    public float fadeSpeed = 0.01f;  //透明化の速さ
-    float alfa;    //A値を操作するための変数
-    float red, green, blue;    //RGBを操作するための変数
+    public GameObject[] GameOverText;
+    public Image[] Panel;
+    private Animator animator;
+    public float FadeSpeed = 0.01f;  //透明化の速さ
+    private float alfa;    //A値を操作するための変数
+    private float red, green, blue;    //RGBを操作するための変数
 
     //進捗状況(1~5の5段階)
     private int progress = 1;
@@ -47,12 +47,12 @@ public class GameController : MonoBehaviour {
     {
         set
         {
-            quotaScore += value;
+            _quotaScore += value;
         }
 
         get
         {
-            return quotaScore;
+            return _quotaScore;
         }
     }
 
@@ -60,7 +60,7 @@ public class GameController : MonoBehaviour {
     {
         get
         {
-            return hour;
+            return _hour;
         }
     }
 
@@ -68,7 +68,7 @@ public class GameController : MonoBehaviour {
     {
         get
         {
-            return minute;
+            return _minute;
         }
     }
 
@@ -84,31 +84,31 @@ public class GameController : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        controller = player.GetComponent<PlayerController>();
-        animator = player.GetComponent<Animator>();
-        logger = scoreLogger.GetComponent<ScoreLogger>();
-        logger.FirstQuota = quotaScore;
-        score = controller.Score;
-        cGUICount = CGUI.Length;
-        sGUICount = SGUI.Length;
-        red = panel[0].GetComponent<Image>().color.r;
-        green = panel[0].GetComponent<Image>().color.g;
-        blue = panel[0].GetComponent<Image>().color.b;
+        _controller = Player.GetComponent<PlayerController>();
+        animator = Player.GetComponent<Animator>();
+        _logger = ScoreLogger.GetComponent<ScoreLogger>();
+        _logger.FirstQuota = _quotaScore;
+        _score = _controller.Score;
+        _cGUICount = CGUI.Length;
+        _sGUICount = SGUI.Length;
+        red = Panel[0].GetComponent<Image>().color.r;
+        green = Panel[0].GetComponent<Image>().color.g;
+        blue = Panel[0].GetComponent<Image>().color.b;
     }
 
     // Update is called once per frame
     void Update()
     {
         //スコアの取得
-        score = controller.Score;
+        _score = _controller.Score;
         //スコアの表示を更新
-        for (int i = 0; i < sGUICount; i++)
+        for (int i = 0; i < _sGUICount; i++)
         {
-            SGUI[i].ScoreTextUpdate(quotaScore, score);
+            SGUI[i].ScoreTextUpdate(_quotaScore, _score);
             PGUI[i].ProgerssTextUpdate(progress);
         }
 
-        if(quotaScore -  score <= 0)
+        if(_quotaScore -  _score <= 0)
         {
             GameOver();
         }
@@ -118,27 +118,27 @@ public class GameController : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (timerFlag == true)
+        if (_isTimer == true)
         {
             //ゲーム内の時間と進捗状況の計算
-            timer += Time.deltaTime;
-            elapsedtimer += Time.deltaTime;
-            hour = (9 + (int)(timer / 9f)) % 24;
-            minute = (int)(timer / 0.15f) % 60;
-            int elapsedhour = (int)(elapsedtimer / 9f);
-            progress = ProgressCheck(score, quotaScore, elapsedhour);
+            _timer += Time.deltaTime;
+            _elapsedTimer += Time.deltaTime;
+            _hour = (9 + (int)(_timer / 9f)) % 24;
+            _minute = (int)(_timer / 0.15f) % 60;
+            int elapsedhour = (int)(_elapsedTimer / 9f);
+            progress = ProgressCheck(_score, _quotaScore, elapsedhour);
         }
 
         //GUIの時間の更新
-        for (int i = 0; i < cGUICount; i++)
+        for (int i = 0; i < _cGUICount; i++)
         {
-            CGUI[i].ClockTextUpdate(hour, minute);
+            CGUI[i].ClockTextUpdate(_hour, _minute);
         }
 
         
 
         //午前0時を過ぎるとゲームオーバー
-        if (hour >= 0 && hour < 9)
+        if (_hour >= 0 && _hour < 9)
         {
             GameOver();
         }
@@ -172,10 +172,10 @@ public class GameController : MonoBehaviour {
 
     void GameOver()
     {
-        timerFlag = false;
-        logger.Score = score;
-        logger.Hour = hour;
-        logger.Minute = minute;
+        _isTimer = false;
+        _logger.Score = _score;
+        _logger.Hour = _hour;
+        _logger.Minute = _minute;
         sceneChange = SceneChange();
         StartCoroutine(sceneChange);
     }
@@ -183,18 +183,18 @@ public class GameController : MonoBehaviour {
     private IEnumerator SceneChange()
     {
         animator.speed = 0;
-        controller.ContorolFlag = false;
-        for (int i = 0; i < gameOverText.Length; i++)
+        _controller.ContorolFlag = false;
+        for (int i = 0; i < GameOverText.Length; i++)
         {
-            gameOverText[i].SetActive(true);
+            GameOverText[i].SetActive(true);
         }
         yield return new WaitForSeconds(1f);
         while (alfa <= 1)
         {
-            for (int i = 0; i < panel.Length; i++)
+            for (int i = 0; i < Panel.Length; i++)
             {
-                panel[i].GetComponent<Image>().color = new Color(red, green, blue, alfa);
-                alfa += fadeSpeed;
+                Panel[i].GetComponent<Image>().color = new Color(red, green, blue, alfa);
+                alfa += FadeSpeed;
             }
             yield return null;
         }
